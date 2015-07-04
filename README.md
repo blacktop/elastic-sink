@@ -1,0 +1,2 @@
+# elastic-sink
+Elasticsearch Sink
