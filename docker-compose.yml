@@ -38,6 +38,17 @@ registrator:
   volumes:
   - "/var/run/docker.sock:/tmp/docker.sock"
 
+# Kafka Load balancer
+lb:
+  build: nginx/Dockerfile
+  links:
+  - consul
+  ports:
+  - "9092:80"
+  environment:
+    SERVICE_NAME: kafka-loadbalancer  
+
+# Zookeeper
 zookeeper:
   image: wurstmeister/zookeeper
   ports:
@@ -45,6 +56,7 @@ zookeeper:
   environment:
     SERVICE_NAME: zookeeper
 
+# Apache Kafka
 kafka:
   image: wurstmeister/kafka
   ports:
