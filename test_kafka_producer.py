@@ -10,6 +10,7 @@ myResolver.nameservers = ['172.16.197.191']
 myAnswers = myResolver.query("kafka.service.consul", "SRV")
 IP = myAnswers.response.additional[0].items[0].address
 PORT = myAnswers.response.answer[0].items[0].port
+print 'Using Kafka Host: {}:{}'.format(IP, PORT)
 
 # To send messages synchronously
 kafka = KafkaClient('{}:{}'.format(IP, PORT))
