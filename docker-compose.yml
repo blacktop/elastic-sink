@@ -1,0 +1,73 @@
+loadbalancer:
+  build: .
+  ports:
+    - "9200:9200"
+  # volumes_from:
+  #   - data
+  # volumes:
+  #   - "$PWD/es_data:/usr/share/elasticsearch/data"
+  #   - "$PWD/config:/usr/share/elasticsearch/config"
+  environment:
+    SERVICE_NAME: elastic-loadbalancer
+  restart: always
+
+# logstash:
+#   image: "logstash:latest"
+#   ports:
+#     - "5000:5000"
+#   volumes:
+#     - "$PWD:/config-dir"
+#   command: logstash -f /config-dir/logstash.conf
+
+# Service Discovery - Consul
+consul:
+  command: -server -bootstrap -advertise 172.16.197.191
+  image: progrium/consul:latest
+  ports:
+  - "8300:8300"
+  - "8400:8400"
+  - "8500:8500"
+  - "8600:53/udp"
+
+# Service Discovery - Registrator
+registrator:
+  command: consul://consul:8500
+  image: gliderlabs/registrator:latest
+  links:
+  - consul
+  volumes:
+  - "/var/run/docker.sock:/tmp/docker.sock"
+
+zookeeper:
+  image: wurstmeister/zookeeper
+  ports:
+    - "2181"
+  environment:
+    SERVICE_NAME: zookeeper
+
+kafka:
+  image: wurstmeister/kafka
+  ports:
+    - "9092"
+  links:
+    - zookeeper:zk
+  environment:
+    KAFKA_ADVERTISED_HOST_NAME: 172.16.197.191
+    SERVICE_NAME: kafka
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+
+# nginx:
+#   image: "nginx:latest"
+#   ports:
+#     - "80:80"
+#   volumes:
+#     - "$PWD/conf/kibana.conf:/etc/nginx/nginx.conf:ro"
+#   links:
+#     - kibana:kibana
+#   restart: always
+
+# data:
+#   image: "busybox"
+#   volumes:
+#     - "/usr/share/elasticsearch/data"

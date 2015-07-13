@@ -5,7 +5,8 @@ import json
 from kafka import SimpleProducer, KafkaClient
 
 # To send messages synchronously
-kafka = KafkaClient('172.16.197.191:9092')
+# kafka = KafkaClient('172.16.197.191:9092')
+kafka = KafkaClient('127.0.0.1:9092')
 producer = SimpleProducer(kafka)
 
 tet = dict(this='EEEEEEEEHHHHH!', _is=['one', 'two', 'buckle my shoe, bitch!'], awesome=dict(look_mom='no hands'))
