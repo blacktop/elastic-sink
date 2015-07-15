@@ -1,4 +1,4 @@
-loadbalancer:
+elasticlb:
   build: .
   ports:
     - "9200:9200"
@@ -21,7 +21,7 @@ loadbalancer:
 
 # Service Discovery - Consul
 consul:
-  command: -server -bootstrap -advertise $DOCKER_IP
+  command: -server -bootstrap -advertise 172.16.197.191
   image: progrium/consul:latest
   ports:
   # - "8300:8300"
@@ -40,7 +40,7 @@ registrator:
 
 # Kafka Load balancer
 lb:
-  build: nginx/Dockerfile
+  build: ./nginx
   links:
   - consul
   ports:
@@ -64,7 +64,7 @@ kafka:
   links:
     - zookeeper:zk
   environment:
-    KAFKA_ADVERTISED_HOST_NAME: $DOCKER_IP
+    KAFKA_ADVERTISED_HOST_NAME: 172.16.197.191
     SERVICE_NAME: kafka
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock

@@ -13,8 +13,8 @@ PORT = myAnswers.response.answer[0].items[0].port
 print 'Using Kafka Host: {}:{}'.format(IP, PORT)
 
 # To send messages synchronously
-kafka = KafkaClient('{}:{}'.format(IP, PORT))
-# kafka = KafkaClient('127.0.0.1:9092')
+# kafka = KafkaClient('{}:{}'.format(IP, PORT))
+kafka = KafkaClient('172.16.197.191:9092')
 producer = SimpleProducer(kafka)
 
 tet = dict(this='EEEEEEEEHHHHH!', _is=['one', 'two', 'buckle my shoe, bitch!'], awesome=dict(look_mom='no hands'))
