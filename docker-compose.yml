@@ -21,7 +21,7 @@ loadbalancer:
 
 # Service Discovery - Consul
 consul:
-  command: -server -bootstrap -advertise 172.16.197.191
+  command: -server -bootstrap -advertise $DOCKER_IP
   image: progrium/consul:latest
   ports:
   # - "8300:8300"
@@ -46,7 +46,7 @@ lb:
   ports:
   - "9092:80"
   environment:
-    SERVICE_NAME: kafka-loadbalancer  
+    SERVICE_NAME: kafka-loadbalancer
 
 # Zookeeper
 zookeeper:
@@ -64,7 +64,7 @@ kafka:
   links:
     - zookeeper:zk
   environment:
-    KAFKA_ADVERTISED_HOST_NAME: 172.16.197.191
+    KAFKA_ADVERTISED_HOST_NAME: $DOCKER_IP
     SERVICE_NAME: kafka
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
